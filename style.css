@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #111;
+  background: #fff;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+
+h1 {
+  margin: 0 0 32px;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+nav {
+  display: grid;
+  gap: 14px;
+}
+
+a {
+  width: fit-content;
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #555;
+}
