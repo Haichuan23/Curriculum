@@ -89,7 +89,7 @@
         },
       \]</div>
       <p>where \(C_{\beta}(s_t)\) is the normalizing partition function. The main challenge is that \(Q^*(s_t, y_t)\) is not directly available, so different inference-time alignment methods use different approximations to it.</p>
-      <p>Prior work therefore relies on various approximations. Khanov et al. (2024) replace \(Q^*(s_t, y_t)\) with \(r(s_t, y_t, \mathrm{EOS})\) when decoding on the fly. Mudgal et al. (2023) first generate an offline dataset using the base model, then train a neural network on that dataset to approximate \(Q^*(s_t, y_t)\) by training a value function that estimates \(\mathbb{E}_{\tilde y \sim \rho_{\mathrm{base}}}[r([s_t, y_t], \tilde y_{>t})]\). Mudgal et al. (2023) also propose an importance sampling method to estimate \(\mathbb{E}_{\tilde y \sim \rho_r}[r([s_t, y_t], \tilde y_{>t})]\), where \(\rho_r\) is the trajectory distribution induced by an LLM trained with reward function \(r\).</p>
+      <p>Prior work therefore relies on various approximations. Khanov et al. (2024) replace \(Q^*(s_t, y_t)\) with \(r(s_t, y_t, \mathrm{EOS})\) when decoding on the fly. Mudgal et al. (2023) first generate an offline dataset using the base model, then train a neural network on that dataset to approximate \(Q^*(s_t, y_t)\) by training a value function that estimates \(\mathbb{E}_{\tilde y \sim \rho_{\mathrm{base}}}[r([s_t, y_t], \tilde y_{>t})]\). Chakraborty et al. (2024) also propose an importance sampling method to estimate \(\mathbb{E}_{\tilde y \sim \rho_r}[r([s_t, y_t], \tilde y_{>t})]\), where \(\rho_r\) is the trajectory distribution induced by an LLM trained with reward function \(r\).</p>
     </section>
     <section>
       <h2>My Contribution</h2>

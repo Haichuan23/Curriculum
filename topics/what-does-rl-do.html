@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Fundamentally Does Reinforcement Learning Do?</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <h1>What Fundamentally Does Reinforcement Learning Do?</h1>
+    <section>
+      <p>The great debate is whether reinforcement learning fundamentally adds new capabilities to a language model, or whether it mostly sharpens the distribution of the base model, since many abilities may already be implicitly encoded in the base model.</p>
+      <p><a href="https://arxiv.org/pdf/2510.14901">Karan and Du (2025)</a> argue for the sharpening view. They show that sampling from a power distribution can concentrate samples in high-likelihood regions of the base model, then propose a Metropolis-Hastings algorithm to sample from this sharpened distribution. Their results suggest that this training-free sampling procedure can reach success rates close to, and sometimes better than, reinforcement learning with GRPO.</p>
+      <p>In this sense, the paper supports the argument that reinforcement learning may often work by sharpening the base model distribution, and that a similar effect can sometimes be achieved directly through sampling. Still, the result should be taken with a grain of salt: the experiments rely heavily on Qwen2.5-style models, which can display unusual empirical phenomena, so the conclusion may not transfer cleanly to every model family.</p>
+    </section>
+    <nav>
+      <a href="post-training-reinforcement-learning.html">Reinforcement Learning</a>
+      <a href="post-training.html">Post-training</a>
+      <a href="../index.html">Go back</a>
+    </nav>
+  </main>
+</body>
+</html>
