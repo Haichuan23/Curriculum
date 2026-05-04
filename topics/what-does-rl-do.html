@@ -9,8 +9,20 @@
 <body>
   <main>
     <h1>What Fundamentally Does Reinforcement Learning Do?</h1>
-    <section>
-      <p>The great debate is whether reinforcement learning fundamentally adds new capabilities to a language model, or whether it mostly sharpens the distribution of the base model, since many abilities may already be implicitly encoded in the base model.</p>
+    <section class="toc">
+      <p>Last updated: May 4, 2026</p>
+      <nav>
+        <a href="#expanding-ability">RL as Expanding Ability</a>
+        <a href="#distribution-sharpening">RL as Distribution Sharpening</a>
+      </nav>
+    </section>
+    <section id="expanding-ability">
+      <h2>RL as Expanding Ability</h2>
+      <p>One view is that reinforcement learning fundamentally adds new capabilities to a language model. On this view, post-training teaches the model behaviors that were not already accessible from the base model distribution.</p>
+    </section>
+    <section id="distribution-sharpening">
+      <h2>RL as Distribution Sharpening</h2>
+      <p>The other view is that reinforcement learning mostly sharpens the distribution of the base model, since many abilities may already be implicitly encoded in the base model. The great debate is whether RL is adding genuinely new ability, or making already-latent ability easier to sample.</p>
       <p><a href="https://arxiv.org/pdf/2510.14901">Karan and Du (2025)</a> argue for the sharpening view. They show that sampling from a power distribution can concentrate samples in high-likelihood regions of the base model, then propose a Metropolis-Hastings algorithm to sample from this sharpened distribution. Their results suggest that this training-free sampling procedure can reach success rates close to, and sometimes better than, reinforcement learning with GRPO.</p>
       <p>In this sense, the paper supports the argument that reinforcement learning may often work by sharpening the base model distribution, and that a similar effect can sometimes be achieved directly through sampling. Still, the result should be taken with a grain of salt: the experiments rely heavily on Qwen2.5-style models, which can display unusual empirical phenomena, so the conclusion may not transfer cleanly to every model family.</p>
     </section>

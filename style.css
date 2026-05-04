@@ -57,6 +57,15 @@ section {
   margin: 0 0 32px;
 }
 
+.toc {
+  margin-bottom: 40px;
+}
+
+.toc p {
+  color: #555;
+  font-size: 14px;
+}
+
 .references {
   margin: 0 0 32px;
   padding-left: 22px;

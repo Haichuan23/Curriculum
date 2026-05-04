@@ -18,7 +18,15 @@
 <body>
   <main>
     <h1>Inference Time Alignment</h1>
-    <section>
+    <section class="toc">
+      <p>Last updated: May 4, 2026</p>
+      <nav>
+        <a href="#introduction">Introduction to Inference-Time Alignment</a>
+        <a href="#alternative-methods">Alternative Methods in Inference-Time Alignment</a>
+        <a href="#my-contribution">My Contribution</a>
+      </nav>
+    </section>
+    <section id="introduction">
       <h2>Introduction to Inference-Time Alignment</h2>
       <p>Inference-time alignment can be modeled as a token-level Markov Decision Process \(M = \{S, A, P, R\}\). Here, \(S\) is the state space, \(A\) is the action space, \(P\) is the transition rule, and \(R\) is the token-level reward.</p>
       <p>For a prompt \(x\), the state at time \(t\) is the concatenation of the prompt and the tokens generated so far:</p>
@@ -91,7 +99,12 @@
       <p>where \(C_{\beta}(s_t)\) is the normalizing partition function. The main challenge is that \(Q^*(s_t, y_t)\) is not directly available, so different inference-time alignment methods use different approximations to it.</p>
       <p>Prior work therefore relies on various approximations. Khanov et al. (2024) replace \(Q^*(s_t, y_t)\) with \(r(s_t, y_t, \mathrm{EOS})\) when decoding on the fly. Mudgal et al. (2023) first generate an offline dataset using the base model, then train a neural network on that dataset to approximate \(Q^*(s_t, y_t)\) by training a value function that estimates \(\mathbb{E}_{\tilde y \sim \rho_{\mathrm{base}}}[r([s_t, y_t], \tilde y_{>t})]\). Chakraborty et al. (2024) also propose an importance sampling method to estimate \(\mathbb{E}_{\tilde y \sim \rho_r}[r([s_t, y_t], \tilde y_{>t})]\), where \(\rho_r\) is the trajectory distribution induced by an LLM trained with reward function \(r\).</p>
     </section>
-    <section>
+    <section id="alternative-methods">
+      <h2>Alternative Methods in Inference-Time Alignment</h2>
+      <p><a href="https://arxiv.org/pdf/2410.08193">GenARM</a> trains an autoregressive token-level reward model: although reward models are usually trained to score full trajectories, decoding happens token by token, so GenARM learns next-token reward guidance for inference-time alignment.</p>
+      <p><a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/41bba7b0f5c81e789a20bb16a370aeeb-Paper-Conference.pdf">Representation Editing / RE-CONTROL</a> treats autoregressive language modeling as a discrete control system: a reward or value signal is used to edit the model’s representation space by taking gradient steps toward a more aligned representation.</p>
+    </section>
+    <section id="my-contribution">
       <h2>My Contribution</h2>
       <p>My paper studies reward shaping for inference-time alignment from a Stackelberg game perspective. The central claim is that directly using a reward model learned from user preference data can be suboptimal when the aligned language model is constrained to stay close to a base model through KL regularization. Instead, the reward model itself should be designed strategically.</p>
       <p>First, consider the standard alignment pipeline. A reward model provider learns a user reward model \(r_U : X \times Y \to \mathbb{R}\) from preference data. This reward model is then passed directly to a downstream alignment process, which uses it to steer the language model toward responses with higher reward. Let \(x \in X\) be a prompt, \(y \in Y\) be a full response, and \(\rho_{\mathrm{base}}\) be the base LLM policy. The downstream alignment process solves</p>
@@ -139,7 +152,9 @@
         <li>Wang, H., Lin, T., Kong, L., Li, C., Jiang, H., and Tambe, M. (2026). Reward Shaping for Inference-Time Alignment: A Stackelberg Game Perspective. <em>arXiv preprint arXiv:2602.02572</em>.</li>
         <li>Chakraborty, S., Ghosal, S. S., Yin, M., Manocha, D., Wang, M., Bedi, A. S., and Huang, F. (2024). Transfer Q-Star: Principled decoding for LLM alignment. <em>Advances in Neural Information Processing Systems</em>, 37:101725-101761.</li>
         <li>Khanov, M., Burapacheep, J., and Li, Y. (2024). ARGS: Alignment as reward-guided search. <em>arXiv preprint arXiv:2402.01694</em>.</li>
+        <li>Kong, L., Wang, H., Mu, W., Du, Y., Zhuang, Y., Zhou, Y., Song, Y., Zhang, R., Wang, K., and Zhang, C. (2024). Aligning Large Language Models with Representation Editing: A Control Perspective. <em>Advances in Neural Information Processing Systems</em>, 38.</li>
         <li>Mudgal, S., Lee, J., Ganapathy, H., Li, Y., Wang, T., Huang, Y., Chen, Z., Cheng, H.-T., Collins, M., Strohman, T., et al. (2023). Controlled decoding from language models. <em>arXiv preprint arXiv:2310.17022</em>.</li>
+        <li>Xu, Y., Sehwag, U. M., Koppel, A., Zhu, S., An, B., Huang, F., and Ganesh, S. (2025). GenARM: Reward Guided Generation with Autoregressive Reward Model for Test-time Alignment. <em>International Conference on Learning Representations</em>.</li>
       </ol>
     </section>
     <nav>
