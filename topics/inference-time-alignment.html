@@ -5,10 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inference Time Alignment</title>
   <link rel="stylesheet" href="../style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
   <main>
     <h1>Inference Time Alignment</h1>
+    <section>
+      <h2>Introduction to Inference-Time Alignment</h2>
+      <p>Inference-time alignment can be modeled as a token-level Markov Decision Process \(M = \{S, A, P, R\}\). Here, \(S\) is the state space, \(A\) is the action space, \(P\) is the transition rule, and \(R\) is the token-level reward.</p>
+      <p>For a prompt \(x\), the state at time \(t\) is the concatenation of the prompt and the tokens generated so far:</p>
+      <div class="math-block">\[
+        s_t = [x, y_{\lt t}].
+      \]</div>
+      <p>The action space \(A\) is the vocabulary \(V\), so choosing an action means selecting the next token. An LLM can therefore be viewed as a policy \(\pi\) that samples the next token according to</p>
+      <div class="math-block">\[
+        y_t \sim \pi(\cdot \mid s_t).
+      \]</div>
+      <p>The full response \(y = (y_1, \ldots, y_T)\) has trajectory-level distribution</p>
+      <div class="math-block">\[
+        \rho(y_1, \ldots, y_T \mid x) = \prod_{i=1}^{T} \pi(y_i \mid x, y_{\lt i}).
+      \]</div>
+      <p>The transition is deterministic: once token \(y_t\) is generated, the next state is</p>
+      <div class="math-block">\[
+        s_{t+1} = [s_t, y_t].
+      \]</div>
+      <p>The goal is to align a base policy \(\rho_{\mathrm{base}}\) to a token-level reward function. Since the reward model \(r : X \times Y \to \mathbb{R}\) scores complete responses, the token-level reward is nonzero only when an end-of-sentence token is reached:</p>
+      <div class="math-block">\[
+        R([x, y_{\le t}]) =
+        \begin{cases}
+          0, & y_t \neq \mathrm{EOS}, \\
+          r([x, y_{\le t}]), & y_t = \mathrm{EOS}.
+        \end{cases}
+      \]</div>
+      <p>The optimal state-action value, or Q-function, measures the best expected future reward from taking token \(y_t\) at state \(s_t\):</p>
+      <div class="math-block">\[
+        Q^*(s_t, y_t)
+        =
+        \max_{\pi}
+        \mathbb{E}
+        \left[
+          \sum_i R([s_t, z_i])
+          \,\middle|\,
+          z_0 = y_t,\,
+          z_i \sim \pi(\cdot \mid s_{t+i})
+        \right],
+      \]</div>
+      <p>where \(s_{t+i} = [s_t, z_0, z_1, \ldots, z_{i-1}]\). Many inference-time alignment methods approximate the trajectory-level objective by solving a per-token decoding problem:</p>
+      <div class="math-block">\[
+        \pi^*_{\mathrm{dec}}(y_t \mid s_t)
+        :=
+        \arg\max_{\pi \in \Pi}
+        \left\{
+          \mathbb{E}_{y_t \sim \pi(\cdot \mid s_t)}
+          [Q^*(s_t, y_t)]
+          -
+          \beta \cdot
+          D_{\mathrm{KL}}
+          \left(
+            \pi(\cdot \mid s_t)
+            \,\middle\|\,
+            \pi_{\mathrm{base}}(\cdot \mid s_t)
+          \right)
+        \right\}.
+      \]</div>
+      <p>This objective has the closed-form solution</p>
+      <div class="math-block">\[
+        \pi^*_{\mathrm{dec}}(y_t \mid s_t)
+        =
+        \pi_{\mathrm{base}}(y_t \mid s_t)
+        \cdot
+        \frac{
+          \exp\left(\frac{1}{\beta} Q^*(s_t, y_t)\right)
+        }{
+          C_{\beta}(s_t)
+        },
+      \]</div>
+      <p>where \(C_{\beta}(s_t)\) is the normalizing partition function. The main challenge is that \(Q^*(s_t, y_t)\) is not directly available, so different inference-time alignment methods use different approximations to it.</p>
+      <p>Prior work therefore relies on various approximations. Khanov et al. (2024) replace \(Q^*(s_t, y_t)\) with \(r(s_t, y_t, \mathrm{EOS})\) when decoding on the fly. Mudgal et al. (2023) first generate an offline dataset using the base model, then train a neural network on that dataset to approximate \(Q^*(s_t, y_t)\) by training a value function that estimates \(\mathbb{E}_{\tilde y \sim \rho_{\mathrm{base}}}[r([s_t, y_t], \tilde y_{>t})]\). Mudgal et al. (2023) also propose an importance sampling method to estimate \(\mathbb{E}_{\tilde y \sim \rho_r}[r([s_t, y_t], \tilde y_{>t})]\), where \(\rho_r\) is the trajectory distribution induced by an LLM trained with reward function \(r\).</p>
+    </section>
+    <section>
+      <h2>My Contribution</h2>
+      <p>My paper studies reward shaping for inference-time alignment from a Stackelberg game perspective. The central claim is that directly using a reward model learned from user preference data can be suboptimal when the aligned language model is constrained to stay close to a base model through KL regularization. Instead, the reward model itself should be designed strategically.</p>
+      <p>First, consider the standard alignment pipeline. A reward model provider learns a user reward model \(r_U : X \times Y \to \mathbb{R}\) from preference data. This reward model is then passed directly to a downstream alignment process, which uses it to steer the language model toward responses with higher reward. Let \(x \in X\) be a prompt, \(y \in Y\) be a full response, and \(\rho_{\mathrm{base}}\) be the base LLM policy. The downstream alignment process solves</p>
+      <div class="math-block">\[
+        \rho_r(\cdot \mid x)
+        =
+        \arg\max_{\rho(\cdot \mid x) \in \Delta(Y)}
+        \left\{
+          \mathbb{E}_{y \sim \rho(\cdot \mid x)}[r_U(x,y)]
+          -
+          \beta
+          D_{\mathrm{KL}}
+          \left(
+            \rho(\cdot \mid x)
+            \,\middle\|\,
+            \rho_{\mathrm{base}}(\cdot \mid x)
+          \right)
+        \right\}.
+      \]</div>
+      <p>The KL term keeps the aligned model close to the base model, which helps preserve fluency and language competence. But it also means the base model still has influence over the final aligned policy. The closed-form solution makes this interaction explicit: the aligned policy weights base-model responses by an exponentiated reward term.</p>
+      <div class="math-block">\[
+        \rho_r(y \mid x)
+        =
+        \rho_{\mathrm{base}}(y \mid x)
+        \cdot
+        \frac{
+          \exp\left(\frac{1}{\beta} r_U(x,y)\right)
+        }{
+          Z_r(x)
+        }.
+      \]</div>
+      <p>This creates a failure mode. Suppose a base model has a strong political bias. For a political prompt, imagine it assigns probability \(0.9\) to a left-leaning response \(y_1\) and probability \(0.1\) to a neutral response \(y_2\). A user prefers neutrality, so the user reward is \(r_U(x,y_1)=1\) and \(r_U(x,y_2)=2\). If the downstream alignment process directly uses \(r_U\), the KL-regularized policy still puts most probability on the left-leaning response: approximately \(0.77\) on \(y_1\) and \(0.23\) on \(y_2\). The user’s expected utility is only about \(1.23\).</p>
+      <p>But if the reward model provider instead gives the downstream alignment process a shaped reward, for example \(\tilde r(x,y_1)=0\) and \(\tilde r(x,y_2)=3\), then the aligned policy puts much more probability on the neutral response: approximately \(0.31\) on \(y_1\) and \(0.69\) on \(y_2\). The user’s expected utility rises to about \(1.69\). The point is not that rewards should always be exaggerated; the point is that the raw user reward is not always the best incentive signal once KL regularization and base-model bias are present.</p>
+      <p>This motivates the core question: how should the reward model be shaped? Too little shaping can leave the aligned model stuck near the base model’s bias. Too much shaping can cause reward hacking or degenerate outputs. My contribution is to formulate this tradeoff as a principal-agent problem.</p>
+      <p>My contribution is to view the reward model provider as the leader and the language model as the follower. The leader chooses the reward model, anticipating that the follower will best respond by solving the KL-regularized alignment problem. This principal-agent perspective turns reward design into an optimization problem: the principal should choose a reward model that induces the follower policy maximizing the user’s true utility.</p>
+      <figure>
+        <img src="../assets/stackelberg-framework.png" alt="Stackelberg game formulation of reward shaping for LLM alignment">
+        <figcaption>Stackelberg view of alignment: the reward model provider chooses the reward model, and the language model best responds through alignment.</figcaption>
+      </figure>
+      <p>Under this framework, my paper derives principal reward shaping: a reward-shaping rule that provably maximizes user utility under the alignment objective. Intuitively, the reward model provider should not always report the raw user utility \(r_U\). Instead, the provider may need to reshape incentives so that the LLM’s best response better matches the user’s desired distribution while staying within bounds that mitigate reward hacking.</p>
+    </section>
+    <section>
+      <h2>References</h2>
+      <ol class="references">
+        <li>Wang, H., Lin, T., Kong, L., Li, C., Jiang, H., and Tambe, M. (2026). Reward Shaping for Inference-Time Alignment: A Stackelberg Game Perspective. <em>arXiv preprint arXiv:2602.02572</em>.</li>
+        <li>Chakraborty, S., Ghosal, S. S., Yin, M., Manocha, D., Wang, M., Bedi, A. S., and Huang, F. (2024). Transfer Q-Star: Principled decoding for LLM alignment. <em>Advances in Neural Information Processing Systems</em>, 37:101725-101761.</li>
+        <li>Khanov, M., Burapacheep, J., and Li, Y. (2024). ARGS: Alignment as reward-guided search. <em>arXiv preprint arXiv:2402.01694</em>.</li>
+        <li>Mudgal, S., Lee, J., Ganapathy, H., Li, Y., Wang, T., Huang, Y., Chen, Z., Cheng, H.-T., Collins, M., Strohman, T., et al. (2023). Controlled decoding from language models. <em>arXiv preprint arXiv:2310.17022</em>.</li>
+      </ol>
+    </section>
     <nav>
       <a href="language-model-alignment.html">Language Model Alignment</a>
       <a href="../index.html">Go back</a>
