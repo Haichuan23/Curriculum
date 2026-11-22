@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Negative logarithm loss as a function of predicted probability</title>
+  <desc id="desc">The curve for negative log p decreases steeply from a very large loss near probability zero to zero loss at probability one. Points at p equals 0.1 and 0.9 are labeled.</desc>
+  <style>
+    .background { fill: #ffffff; }
+    .grid { stroke: #dce3ed; stroke-width: 1; }
+    .axis { stroke: #263445; stroke-width: 2; }
+    .curve { fill: none; stroke: #2563eb; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    .tick { fill: #4b5563; font: 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .label { fill: #111827; font: 18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 600; }
+    .note { fill: #1e3a8a; font: 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 600; }
+    .point { fill: #ffffff; stroke: #2563eb; stroke-width: 4; }
+  </style>
+  <rect class="background" width="800" height="500" rx="16"/>
+  <line x1="90" y1="420.0" x2="740" y2="420.0" class="grid"/><text x="72" y="425.0" class="tick" text-anchor="end">0</text><line x1="90" y1="328.8" x2="740" y2="328.8" class="grid"/><text x="72" y="333.8" class="tick" text-anchor="end">1</text><line x1="90" y1="237.5" x2="740" y2="237.5" class="grid"/><text x="72" y="242.5" class="tick" text-anchor="end">2</text><line x1="90" y1="146.3" x2="740" y2="146.3" class="grid"/><text x="72" y="151.3" class="tick" text-anchor="end">3</text><line x1="90" y1="55.0" x2="740" y2="55.0" class="grid"/><text x="72" y="60.0" class="tick" text-anchor="end">4</text>
+  <line x1="90.0" y1="55" x2="90.0" y2="420" class="grid"/><text x="90.0" y="448" class="tick" text-anchor="middle">0.0</text><line x1="220.0" y1="55" x2="220.0" y2="420" class="grid"/><text x="220.0" y="448" class="tick" text-anchor="middle">0.2</text><line x1="350.0" y1="55" x2="350.0" y2="420" class="grid"/><text x="350.0" y="448" class="tick" text-anchor="middle">0.4</text><line x1="480.0" y1="55" x2="480.0" y2="420" class="grid"/><text x="480.0" y="448" class="tick" text-anchor="middle">0.6</text><line x1="610.0" y1="55" x2="610.0" y2="420" class="grid"/><text x="610.0" y="448" class="tick" text-anchor="middle">0.8</text><line x1="740.0" y1="55" x2="740.0" y2="420" class="grid"/><text x="740.0" y="448" class="tick" text-anchor="middle">1.0</text>
+  <line x1="90" y1="420" x2="740" y2="420" class="axis"/>
+  <line x1="90" y1="55" x2="90" y2="420" class="axis"/>
+  <path d="M 101.9 55.0 L 105.9 81.4 L 109.9 101.8 L 113.9 118.5 L 117.9 132.6 L 121.8 144.8 L 125.8 155.5 L 129.8 165.2 L 133.8 173.9 L 137.8 181.8 L 141.8 189.2 L 145.8 195.9 L 149.8 202.2 L 153.8 208.1 L 157.7 213.7 L 161.7 218.9 L 165.7 223.8 L 169.7 228.5 L 173.7 233.0 L 177.7 237.2 L 181.7 241.3 L 185.7 245.1 L 189.6 248.9 L 193.6 252.5 L 197.6 255.9 L 201.6 259.2 L 205.6 262.4 L 209.6 265.5 L 213.6 268.5 L 217.6 271.4 L 221.5 274.2 L 225.5 276.9 L 229.5 279.6 L 233.5 282.2 L 237.5 284.7 L 241.5 287.1 L 245.5 289.5 L 249.5 291.8 L 253.5 294.0 L 257.4 296.2 L 261.4 298.4 L 265.4 300.5 L 269.4 302.5 L 273.4 304.5 L 277.4 306.5 L 281.4 308.4 L 285.4 310.3 L 289.3 312.1 L 293.3 314.0 L 297.3 315.7 L 301.3 317.5 L 305.3 319.2 L 309.3 320.8 L 313.3 322.5 L 317.3 324.1 L 321.3 325.7 L 325.2 327.3 L 329.2 328.8 L 333.2 330.3 L 337.2 331.8 L 341.2 333.2 L 345.2 334.7 L 349.2 336.1 L 353.2 337.5 L 357.1 338.9 L 361.1 340.2 L 365.1 341.5 L 369.1 342.9 L 373.1 344.2 L 377.1 345.4 L 381.1 346.7 L 385.1 347.9 L 389.0 349.2 L 393.0 350.4 L 397.0 351.6 L 401.0 352.7 L 405.0 353.9 L 409.0 355.0 L 413.0 356.2 L 417.0 357.3 L 421.0 358.4 L 424.9 359.5 L 428.9 360.6 L 432.9 361.6 L 436.9 362.7 L 440.9 363.7 L 444.9 364.8 L 448.9 365.8 L 452.9 366.8 L 456.8 367.8 L 460.8 368.8 L 464.8 369.8 L 468.8 370.7 L 472.8 371.7 L 476.8 372.6 L 480.8 373.6 L 484.8 374.5 L 488.8 375.4 L 492.7 376.3 L 496.7 377.2 L 500.7 378.1 L 504.7 379.0 L 508.7 379.9 L 512.7 380.7 L 516.7 381.6 L 520.7 382.4 L 524.6 383.3 L 528.6 384.1 L 532.6 384.9 L 536.6 385.8 L 540.6 386.6 L 544.6 387.4 L 548.6 388.2 L 552.6 389.0 L 556.5 389.7 L 560.5 390.5 L 564.5 391.3 L 568.5 392.1 L 572.5 392.8 L 576.5 393.6 L 580.5 394.3 L 584.5 395.0 L 588.5 395.8 L 592.4 396.5 L 596.4 397.2 L 600.4 397.9 L 604.4 398.7 L 608.4 399.4 L 612.4 400.1 L 616.4 400.7 L 620.4 401.4 L 624.3 402.1 L 628.3 402.8 L 632.3 403.5 L 636.3 404.1 L 640.3 404.8 L 644.3 405.5 L 648.3 406.1 L 652.3 406.8 L 656.3 407.4 L 660.2 408.1 L 664.2 408.7 L 668.2 409.3 L 672.2 409.9 L 676.2 410.6 L 680.2 411.2 L 684.2 411.8 L 688.2 412.4 L 692.1 413.0 L 696.1 413.6 L 700.1 414.2 L 704.1 414.8 L 708.1 415.4 L 712.1 416.0 L 716.1 416.6 L 720.1 417.2 L 724.0 417.7 L 728.0 418.3 L 732.0 418.9 L 736.0 419.4 L 740.0 420.0" class="curve"/>
+  <circle cx="155.0" cy="209.9" r="6" class="point"/>
+  <text x="169.0" y="195.9" class="note">p = 0.1, loss ≈ 2.303</text>
+  <circle cx="675.0" cy="410.4" r="6" class="point"/>
+  <text x="667.0" y="388.4" class="note" text-anchor="end">p = 0.9, loss ≈ 0.105</text>
+  <text x="415" y="482" class="label" text-anchor="middle">Predicted probability p for the true class</text>
+  <text x="24" y="237.5" class="label" text-anchor="middle" transform="rotate(-90 24 237.5)">Loss = −log(p)</text>
+  <text x="736" y="79" class="note" text-anchor="end">Confidently wrong → very large penalty</text>
+</svg>
