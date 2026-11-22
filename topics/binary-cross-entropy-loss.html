@@ -64,16 +64,16 @@
     </section>
     <section>
       <h2>From one example to a dataset</h2>
-      <p>Training usually minimizes the mean binary cross-entropy across a batch of \(N\) examples:</p>
+      <p>For input \(x_i\), let \(p_\theta(x_i) = P_\theta(Y=1 \mid X=x_i)\) be the probability predicted by a model with parameters \(\theta\). Training usually minimizes the mean binary cross-entropy across a batch of \(N\) examples:</p>
       <div class="math-block">\[
-        \operatorname{BCE}
+        \operatorname{BCE}(\theta)
         =
         -\frac{1}{N}
         \sum_{i=1}^{N}
         \left[
-          y_i \log p_i
+          y_i \log p_\theta(x_i)
           +
-          (1-y_i)\log(1-p_i)
+          (1-y_i)\log\left(1-p_\theta(x_i)\right)
         \right].
       \]</div>
       <p>A lower binary cross-entropy means the predicted probabilities align more closely with the true labels. In practice, deep-learning libraries often compute this loss directly from logits for better numerical stability.</p>
