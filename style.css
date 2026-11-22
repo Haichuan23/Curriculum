@@ -87,6 +87,36 @@ section {
   padding: 2px 0;
 }
 
+table {
+  width: 100%;
+  margin: 20px 0 8px;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+th,
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #d6c9ae;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+}
+
+ul {
+  margin: 0 0 18px;
+  padding-left: 22px;
+}
+
+li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
 nav {
   display: grid;
   gap: 14px;
