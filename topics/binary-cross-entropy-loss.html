@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Binary Cross-Entropy Loss</title>
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Binary Cross-Entropy Loss</h1>
+    <section>
+      <p>Binary cross-entropy measures how well a predicted probability matches a binary label.</p>
+      <p>Let \(p\) be the model's predicted probability that \(y = 1\). For one example, the loss is</p>
+      <div class="math-block">\[
+        L(p,y) = -y\log p - (1-y)\log(1-p).
+      \]</div>
+      <p>Because \(y\) is either 0 or 1, only one term contributes:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>True label</th>
+            <th>Loss</th>
+            <th>What minimizes it?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(y = 1\)</td>
+            <td>\(-\log p\)</td>
+            <td>Making \(p\) close to 1</td>
+          </tr>
+          <tr>
+            <td>\(y = 0\)</td>
+            <td>\(-\log(1-p)\)</td>
+            <td>Making \(p\) close to 0</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h2>Understanding \(-\log p\)</h2>
+      <p>When the true label is 1, \(p\) is the probability assigned to the correct class. The negative logarithm gives a small penalty to confident correct predictions and a large penalty to confident wrong predictions.</p>
+      <figure>
+        <img src="../assets/negative-log-loss.svg" alt="Plot of negative log p against predicted probability p">
+        <figcaption>The loss approaches zero as the probability assigned to the correct class approaches one, and grows rapidly as that probability approaches zero.</figcaption>
+      </figure>
+      <ul>
+        <li>The loss is 0 when \(p = 1\).</li>
+        <li>The loss grows as the model assigns less probability to the correct class.</li>
+        <li>The loss approaches infinity as \(p\) approaches 0, heavily penalizing confident mistakes.</li>
+      </ul>
+      <p>For example, when the true label is 1, predicting \(p = 0.9\) gives a loss of about \(0.105\), while predicting \(p = 0.1\) gives a loss of about \(2.303\).</p>
+      <p>When the true label is 0, binary cross-entropy uses \(-\log(1-p)\), which follows the same idea with the curve reflected horizontally.</p>
+    </section>
+    <section>
+      <h2>From one example to a dataset</h2>
+      <p>Training usually minimizes the mean binary cross-entropy across a batch of \(N\) examples:</p>
+      <div class="math-block">\[
+        \operatorname{BCE}
+        =
+        -\frac{1}{N}
+        \sum_{i=1}^{N}
+        \left[
+          y_i \log p_i
+          +
+          (1-y_i)\log(1-p_i)
+        \right].
+      \]</div>
+      <p>A lower binary cross-entropy means the predicted probabilities align more closely with the true labels. In practice, deep-learning libraries often compute this loss directly from logits for better numerical stability.</p>
+    </section>
+    <nav>
+      <a href="basics.html">Basics</a>
+      <a href="../index.html">Go back</a>
+    </nav>
+  </main>
+</body>
+</html>
